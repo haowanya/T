@@ -14,7 +14,7 @@
     }
 
     .container {
-      max-width: 600px;
+      max-width: 100%;
       margin: 0 auto;
       background: #fff;
       padding: 20px;
@@ -32,7 +32,8 @@
 
     input,
     button {
-      padding: 10px;
+      padding: 12px;
+      /* 增加padding以适应手指操作 */
       border: 1px solid #ddd;
       border-radius: 4px;
     }
@@ -42,6 +43,8 @@
       color: white;
       border: none;
       cursor: pointer;
+      font-size: 16px;
+      /* 增加字体大小以适应手指操作 */
     }
 
     button:hover {
@@ -50,6 +53,31 @@
 
     .results {
       margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+
+      /* 为小屏幕设备调整样式 */
+      .container {
+        padding: 10px;
+      }
+
+      label,
+      input,
+      button {
+        margin-bottom: 5px;
+      }
+
+      input,
+      button {
+        padding: 10px;
+        /* 减少padding以适应小屏幕 */
+      }
+
+      button {
+        font-size: 14px;
+        /* 减少字体大小以适应小屏幕 */
+      }
     }
   </style>
 </head>
