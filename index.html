@@ -114,7 +114,7 @@
       buyPrice = parseFloat(buyPrice);
       sellPrice = parseFloat(sellPrice);
       quantity = parseFloat(quantity);
-      feeRate = buyPrice * quantity * 0.0001 + sellPrice * quantity * 0.001;
+      feeRate = buyPrice * quantity * 0.0001 + sellPrice * quantity * 0.0006;
 
       if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(quantity) || isNaN(feeRate)) {
         alert('请输入有效的数字！');
