@@ -91,7 +91,7 @@
     <label for="sellPrice">卖出价格:</label>
     <input type="number" id="sellPrice" placeholder="卖出价格">
 
-    <label for="quantity">数量:</label>
+    <label for="quantity">数量 * 100:</label>
     <input type="number" id="quantity" placeholder="数量">
 
     <!-- <label for="feeRate">手续费率 (%):</label>
@@ -113,7 +113,7 @@
 
       buyPrice = parseFloat(buyPrice);
       sellPrice = parseFloat(sellPrice);
-      quantity = parseFloat(quantity);
+      quantity = parseFloat(quantity) * 100;
       feeRate = buyPrice * quantity * 0.0001 + sellPrice * quantity * 0.0006;
 
       if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(quantity) || isNaN(feeRate)) {
