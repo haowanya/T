@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>交易计算器</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background-color: #f4f4f4;
+    }
+
+    .container {
+      max-width: 100%;
+      margin: 0 auto;
+      background: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label,
+    input,
+    button {
+      display: block;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+
+    input,
+    button {
+      padding: 12px;
+      /* 增加padding以适应手指操作 */
+      border: 1px solid #ddd;
+      border-radius: 4px;
+    }
+
+    button {
+      background-color: #5cb85c;
+      color: white;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      /* 增加字体大小以适应手指操作 */
+    }
+
+    button:hover {
+      background-color: #4cae4c;
+    }
+
+    .results {
+      margin-top: 20px;
+    }
+
+    @media (max-width: 600px) {
+
+      /* 为小屏幕设备调整样式 */
+      .container {
+        padding: 10px;
+      }
+
+      label,
+      input,
+      button {
+        margin-bottom: 5px;
+      }
+
+      input,
+      button {
+        padding: 10px;
+        /* 减少padding以适应小屏幕 */
+      }
+
+      button {
+        font-size: 14px;
+        /* 减少字体大小以适应小屏幕 */
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <h2>交易计算器</h2>
+    <label for="buyPrice">买入价格:</label>
+    <input type="number" id="buyPrice" placeholder="买入价格">
+
+    <label for="sellPrice">卖出价格:</label>
+    <input type="number" id="sellPrice" placeholder="卖出价格">
+
+    <label for="quantity">数量 * 100:</label>
+    <input type="number" id="quantity" placeholder="数量">
+
+    <!-- <label for="feeRate">手续费率 (%):</label>
+    <input type="number" id="feeRate" placeholder="手续费率" value="0.1"> -->
+
+    <button onclick="calculate()">计算</button>
+
+    <div class="results" id="results">
+      <!-- 结果将在这里显示 -->
+    </div>
+  </div>
+
+  <script>
+    function calculate() {
+      var buyPrice = document.getElementById('buyPrice').value;
+      var sellPrice = document.getElementById('sellPrice').value;
+      var quantity = document.getElementById('quantity').value;
+      // var feeRate = document.getElementById('feeRate').value;
+
+      buyPrice = parseFloat(buyPrice);
+      sellPrice = parseFloat(sellPrice);
+      quantity = parseFloat(quantity) * 100;
+      feeRate = buyPrice * quantity * 0.0001 + sellPrice * quantity * 0.0006;
+
+      if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(quantity) || isNaN(feeRate)) {
+        alert('请输入有效的数字！');
+        return;
+      }
+
+      var totalBuy = buyPrice * quantity;
+      var totalSell = sellPrice * quantity;
+      var profit = totalSell - totalBuy - feeRate;
+
+      var results = document.getElementById('results');
+      results.innerHTML = `
+    <p>总买入金额: ${totalBuy.toFixed(2)}</p>
+    <p>总卖出金额: ${totalSell.toFixed(2)}</p>
+    <p>手续费: ${feeRate.toFixed(2)}</p>
+    <p>盈利: ${profit.toFixed(2)}</p>
+  `;
+    }
+  </script>
+</body>
+
+</html>

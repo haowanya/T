@@ -1,139 +1,470 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh-CN">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>交易计算器</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 20px;
-      background-color: #f4f4f4;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>挑战 30天不吃阿上 倒计时</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .container {
-      max-width: 100%;
-      margin: 0 auto;
-      background: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Microsoft YaHei', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
 
-    label,
-    input,
-    button {
-      display: block;
-      width: 100%;
-      margin-bottom: 10px;
-    }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 600px;
+            width: 100%;
+            text-align: center;
+        }
 
-    input,
-    button {
-      padding: 12px;
-      /* 增加padding以适应手指操作 */
-      border: 1px solid #ddd;
-      border-radius: 4px;
-    }
+        h1 {
+            font-size: 2.5rem;
+            color: #333;
+            margin-bottom: 10px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
 
-    button {
-      background-color: #5cb85c;
-      color: white;
-      border: none;
-      cursor: pointer;
-      font-size: 16px;
-      /* 增加字体大小以适应手指操作 */
-    }
+        .subtitle {
+            font-size: 1.2rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
 
-    button:hover {
-      background-color: #4cae4c;
-    }
+        .current-day {
+            font-size: 4rem;
+            font-weight: bold;
+            color: #667eea;
+            margin: 30px 0;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .results {
-      margin-top: 20px;
-    }
+        .day-label {
+            font-size: 1.5rem;
+            color: #666;
+            margin-bottom: 30px;
+        }
 
-    @media (max-width: 600px) {
+        .countdown {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
 
-      /* 为小屏幕设备调整样式 */
-      .container {
-        padding: 10px;
-      }
+        .countdown-item {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
 
-      label,
-      input,
-      button {
-        margin-bottom: 5px;
-      }
+        .countdown-value {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: #667eea;
+            display: block;
+        }
 
-      input,
-      button {
-        padding: 10px;
-        /* 减少padding以适应小屏幕 */
-      }
+        .countdown-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+            display: block;
+        }
 
-      button {
-        font-size: 14px;
-        /* 减少字体大小以适应小屏幕 */
-      }
-    }
-  </style>
+        .progress-container {
+            background: #e0e0e0;
+            height: 30px;
+            border-radius: 15px;
+            overflow: hidden;
+            margin: 30px 0;
+            position: relative;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            transition: width 0.5s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .target-date {
+            font-size: 1.2rem;
+            color: #666;
+            margin: 20px 0;
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .target-date strong {
+            color: #667eea;
+        }
+
+        .check-in-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 10px;
+            cursor: pointer;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+            font-weight: bold;
+        }
+
+        .check-in-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .check-in-btn:active {
+            transform: translateY(0);
+        }
+
+        .check-in-btn.checked {
+            background: #4caf50;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin: 30px 0;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #999;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .calendar-day.checked {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .calendar-day.checked::after {
+            content: '✓';
+            font-size: 1.5rem;
+            margin-top: 5px;
+        }
+
+        .calendar-day.today {
+            border-color: #ff9800;
+            border-width: 3px;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 30px 0;
+        }
+
+        .stat-item {
+            padding: 15px;
+            background: #f5f5f5;
+            border-radius: 10px;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #666;
+            margin-top: 5px;
+        }
+
+        .motivation {
+            font-size: 1.5rem;
+            color: #667eea;
+            margin: 20px 0;
+            font-weight: bold;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @media (max-width: 600px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+
+            .current-day {
+                font-size: 3rem;
+            }
+
+            .countdown {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            .countdown-value {
+                font-size: 2rem;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(5, 1fr);
+                gap: 5px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <div class="container">
-    <h2>交易计算器</h2>
-    <label for="buyPrice">买入价格:</label>
-    <input type="number" id="buyPrice" placeholder="买入价格">
+    <div class="container">
+        <h1>🎯 挑战 30天不吃阿上 倒计时</h1>
+        <p class="subtitle">坚持就是胜利！</p>
 
-    <label for="sellPrice">卖出价格:</label>
-    <input type="number" id="sellPrice" placeholder="卖出价格">
+        <div class="current-day" id="currentDay">第 1 天</div>
+        <div class="day-label">加油！继续坚持！</div>
 
-    <label for="quantity">数量 * 100:</label>
-    <input type="number" id="quantity" placeholder="数量">
+        <div class="progress-container">
+            <div class="progress-bar" id="progressBar">0%</div>
+        </div>
 
-    <!-- <label for="feeRate">手续费率 (%):</label>
-    <input type="number" id="feeRate" placeholder="手续费率" value="0.1"> -->
+        <div class="countdown" id="countdown">
+            <div class="countdown-item">
+                <span class="countdown-value" id="days">0</span>
+                <span class="countdown-label">天</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="hours">0</span>
+                <span class="countdown-label">时</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="minutes">0</span>
+                <span class="countdown-label">分</span>
+            </div>
+            <div class="countdown-item">
+                <span class="countdown-value" id="seconds">0</span>
+                <span class="countdown-label">秒</span>
+            </div>
+        </div>
 
-    <button onclick="calculate()">计算</button>
+        <div class="target-date">
+            目标日期: <strong>2026年1月8日</strong>
+        </div>
 
-    <div class="results" id="results">
-      <!-- 结果将在这里显示 -->
+        <button class="check-in-btn" id="checkInBtn" onclick="checkIn()">
+            ✓ 今日打卡
+        </button>
+
+        <div class="stats">
+            <div class="stat-item">
+                <div class="stat-value" id="checkedDays">0</div>
+                <div class="stat-label">已打卡天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="remainingDays">30</div>
+                <div class="stat-label">剩余天数</div>
+            </div>
+            <div class="stat-item">
+                <div class="stat-value" id="completionRate">0%</div>
+                <div class="stat-label">完成率</div>
+            </div>
+        </div>
+
+        <h3 style="margin: 30px 0 15px 0; color: #333;">📅 打卡日历</h3>
+        <div class="calendar-grid" id="calendarGrid"></div>
+
+        <div class="motivation" id="motivation">💪 坚持下去，你可以的！</div>
     </div>
-  </div>
 
-  <script>
-    function calculate() {
-      var buyPrice = document.getElementById('buyPrice').value;
-      var sellPrice = document.getElementById('sellPrice').value;
-      var quantity = document.getElementById('quantity').value;
-      // var feeRate = document.getElementById('feeRate').value;
+    <script>
+        // 目标日期：2026年1月8日
+        const targetDate = new Date('2026-01-08T23:59:59');
+        const startDate = new Date('2025-12-10T00:00:00'); // 第1天开始日期
+        const totalDays = 30;
 
-      buyPrice = parseFloat(buyPrice);
-      sellPrice = parseFloat(sellPrice);
-      quantity = parseFloat(quantity) * 100;
-      feeRate = buyPrice * quantity * 0.0001 + sellPrice * quantity * 0.0006;
+        // 从 localStorage 读取打卡记录
+        let checkedDays = JSON.parse(localStorage.getItem('checkedDays') || '[]');
 
-      if (isNaN(buyPrice) || isNaN(sellPrice) || isNaN(quantity) || isNaN(feeRate)) {
-        alert('请输入有效的数字！');
-        return;
-      }
+        // 更新倒计时
+        function updateCountdown() {
+            const now = new Date();
+            const diff = targetDate - now;
 
-      var totalBuy = buyPrice * quantity;
-      var totalSell = sellPrice * quantity;
-      var profit = totalSell - totalBuy - feeRate;
+            if (diff <= 0) {
+                document.getElementById('countdown').innerHTML = '<div class="motivation" style="grid-column: 1/-1;">🎉 挑战完成！恭喜你！</div>';
+                return;
+            }
 
-      var results = document.getElementById('results');
-      results.innerHTML = `
-    <p>总买入金额: ${totalBuy.toFixed(2)}</p>
-    <p>总卖出金额: ${totalSell.toFixed(2)}</p>
-    <p>手续费: ${feeRate.toFixed(2)}</p>
-    <p>盈利: ${profit.toFixed(2)}</p>
-  `;
-    }
-  </script>
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+
+            document.getElementById('days').textContent = days;
+            document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+            document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+            document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+        }
+
+        // 计算当前是第几天
+        function getCurrentDay() {
+            const now = new Date();
+            const diffTime = now - startDate;
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            return Math.min(Math.max(diffDays, 1), totalDays);
+        }
+
+        // 更新进度
+        function updateProgress() {
+            const currentDay = getCurrentDay();
+            const progress = (currentDay / totalDays) * 100;
+            
+            document.getElementById('currentDay').textContent = `第 ${currentDay} 天`;
+            document.getElementById('progressBar').style.width = progress + '%';
+            document.getElementById('progressBar').textContent = Math.round(progress) + '%';
+            
+            const checked = checkedDays.length;
+            const remaining = totalDays - currentDay + 1;
+            const completionRate = Math.round((checked / totalDays) * 100);
+
+            document.getElementById('checkedDays').textContent = checked;
+            document.getElementById('remainingDays').textContent = remaining;
+            document.getElementById('completionRate').textContent = completionRate + '%';
+
+            // 更新激励语
+            updateMotivation(currentDay, completionRate);
+        }
+
+        // 更新激励语
+        function updateMotivation(day, rate) {
+            const motivations = [
+                '💪 坚持下去，你可以的！',
+                '🌟 每一天都是新的开始！',
+                '🔥 你已经很棒了！',
+                '⭐ 继续加油，胜利在望！',
+                '🎯 目标就在前方！',
+                '✨ 你比你想象的更强大！',
+                '🚀 距离成功越来越近了！',
+                '🏆 坚持就是胜利！'
+            ];
+
+            if (rate >= 90) {
+                document.getElementById('motivation').textContent = '🎉 太棒了！即将完成挑战！';
+            } else if (rate >= 50) {
+                document.getElementById('motivation').textContent = '🔥 已经过半！继续保持！';
+            } else if (day > 10) {
+                document.getElementById('motivation').textContent = '⭐ 好样的！已经坚持这么久了！';
+            } else {
+                const randomMotivation = motivations[Math.floor(Math.random() * motivations.length)];
+                document.getElementById('motivation').textContent = randomMotivation;
+            }
+        }
+
+        // 生成日历
+        function generateCalendar() {
+            const grid = document.getElementById('calendarGrid');
+            grid.innerHTML = '';
+            const currentDay = getCurrentDay();
+
+            for (let i = 1; i <= totalDays; i++) {
+                const dayDiv = document.createElement('div');
+                dayDiv.className = 'calendar-day';
+                dayDiv.textContent = i;
+
+                if (checkedDays.includes(i)) {
+                    dayDiv.classList.add('checked');
+                }
+
+                if (i === currentDay) {
+                    dayDiv.classList.add('today');
+                }
+
+                grid.appendChild(dayDiv);
+            }
+        }
+
+        // 打卡功能
+        function checkIn() {
+            const currentDay = getCurrentDay();
+            const btn = document.getElementById('checkInBtn');
+
+            if (checkedDays.includes(currentDay)) {
+                // 取消打卡
+                checkedDays = checkedDays.filter(d => d !== currentDay);
+                btn.textContent = '✓ 今日打卡';
+                btn.classList.remove('checked');
+            } else {
+                // 打卡
+                checkedDays.push(currentDay);
+                checkedDays.sort((a, b) => a - b);
+                btn.textContent = '✅ 已打卡';
+                btn.classList.add('checked');
+            }
+
+            localStorage.setItem('checkedDays', JSON.stringify(checkedDays));
+            updateProgress();
+            generateCalendar();
+        }
+
+        // 初始化打卡按钮状态
+        function initCheckInButton() {
+            const currentDay = getCurrentDay();
+            const btn = document.getElementById('checkInBtn');
+
+            if (checkedDays.includes(currentDay)) {
+                btn.textContent = '✅ 已打卡';
+                btn.classList.add('checked');
+            }
+        }
+
+        // 初始化
+        function init() {
+            updateCountdown();
+            updateProgress();
+            generateCalendar();
+            initCheckInButton();
+            setInterval(updateCountdown, 1000);
+        }
+
+        // 页面加载完成后初始化
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
 </body>
-
 </html>
